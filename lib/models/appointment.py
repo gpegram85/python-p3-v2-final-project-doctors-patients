@@ -4,7 +4,7 @@ from models.__init__ import CONN, CURSOR
 
 class Appointment:
     
-    def __init__(self, patient, doctor, date, id=None):
+    def __init__(self, id, patient, doctor, date):
         if not isinstance(patient, Patient):
             raise AttributeError("Patient must be an instance of Patient.")
         self.patient = patient

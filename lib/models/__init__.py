@@ -1,4 +1,4 @@
 import sqlite3
 
-CONN = sqlite3.connect('vault.db')
+CONN = sqlite3.connect('doctors_patients.db')
 CURSOR = CONN.cursor()

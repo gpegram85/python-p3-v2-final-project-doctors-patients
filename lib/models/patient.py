@@ -2,7 +2,10 @@ from models.__init__ import CONN, CURSOR
 
 class Patient:
 
-     def __init__(self, name, illness, insurance, id=None):
+     def __init__(self, id, name, illness, insurance):
+
+          self.id = id
+
           if not isinstance(name, str) or not len(name) > 0:
                raise AttributeError("Name must be a string longer than 0 characters.")
           self.name = name
@@ -15,7 +18,7 @@ class Patient:
                raise AttributeError("Insurance must be either 'Y' or 'N'")
           self.insurance = insurance
 
-          self.id = id
+          
 
      @classmethod
      def create_table(cls):
@@ -54,10 +57,11 @@ class Patient:
      
      @classmethod
      def find_by_name(cls, name):
-         """Find a petient by name."""
-         sql = "SELECT * FROM patients WHERE name = ?"
-         row = CURSOR.execute(sql, (name,)).fetchall()
-         return cls(*row) if row else None
+        """Find a single patient by name."""
+        sql = "SELECT * FROM patients WHERE name = ?"
+        row = CURSOR.execute(sql, (name,)).fetchone()
+
+        return cls(*row) if row else None
 
      @classmethod
      def get_all(cls):

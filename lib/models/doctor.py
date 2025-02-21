@@ -2,7 +2,7 @@ from models.__init__ import CONN, CURSOR
 
 class Doctor:
     
-    def __init__(self, name, specialty, hospital, id=None):
+    def __init__(self, id, name, specialty, hospital):
         if not isinstance(name, str) or not 0 < len(name):
             raise AttributeError("Name must be a non-empty string.")
         self.name = name
@@ -50,6 +50,14 @@ class Doctor:
         """Find a doctor by ID."""
         sql = "SELECT * FROM doctors WHERE id = ?"
         row = CURSOR.execute(sql, (id,)).fetchone()
+        return cls(*row) if row else None
+    
+    @classmethod
+    def find_by_name(cls, name):
+        """Find a single doctor by name."""
+        sql = "SELECT * FROM doctors WHERE name = ?"
+        row = CURSOR.execute(sql, (name,)).fetchone()
+
         return cls(*row) if row else None
 
     @classmethod

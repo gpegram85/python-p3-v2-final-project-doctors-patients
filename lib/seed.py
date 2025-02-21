@@ -1,30 +1,18 @@
 #!/usr/bin/env python3
 
-from models import CONN, CURSOR
 from models.doctor import Doctor
 from models.patient import Patient
 from models.appointment import Appointment
 
 def seed_database():
+    
     Doctor.drop_table()
     Patient.drop_table()
     Appointment.drop_table()
+
     Doctor.create_table()
     Patient.create_table()
     Appointment.create_table()
-
-    sql = """
-        CREATE TABLE IF NOT EXISTS players_games (
-        id INTERGER PRIMARY KEY,
-        player_id INTEGER,
-        game_id INTEGER,
-        score TEXT,
-        FOREIGN KEY (player_id) REFERENCES players(id),
-        FOREIGN KEY (game_id) REFERENCES games(id)
-        );
-    """
-    CURSOR.execute(sql)
-    CONN.commit()
 
     # Seed data creation
     patient_one = Patient.create("Grey", "Migraine", "Y")
@@ -36,3 +24,6 @@ def seed_database():
     doctor_three = Doctor.create("Jones", "Pathologist", "Trident Urgent Care")
 
     print("Database seeded.")
+
+if __name__ == "__main__":
+    seed_database()

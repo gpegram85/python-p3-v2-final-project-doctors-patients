@@ -8,7 +8,8 @@ from helpers import (
     verify_insurance,
     search_doctor,
     search_specialty,
-    schedule_appointment
+    schedule_appointment,
+    display_doctors
 )
 
 def main() :
@@ -27,6 +28,8 @@ def main() :
             search_doctor()
         elif choice == "6":
             search_specialty()
+        elif choice == "7":
+            display_doctors()
         elif choice == "7":
             schedule_appointment()
         elif choice == "0":
