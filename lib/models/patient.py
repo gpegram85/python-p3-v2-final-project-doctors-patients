@@ -2,7 +2,7 @@ from models.__init__ import CONN, CURSOR
 
 class Patient:
 
-     def __init__(self, id, name, illness, insurance):
+     def __init__(self, name, illness, insurance, id=None):
 
           self.id = id
 
@@ -22,24 +22,24 @@ class Patient:
 
      @classmethod
      def create_table(cls):
-        """Create the patients table."""
-        sql = """
-            CREATE TABLE IF NOT EXISTS patients (
-                id INTEGER PRIMARY KEY,
-                name TEXT NOT NULL,
-                illness TEXT NOT NULL,
-                insurance CHAR NOT NULL CHECK(insurance IN ('Y', 'N'))
-            );
-        """
-        CURSOR.execute(sql)
-        CONN.commit()
+          """Create the patients table."""
+          sql = """
+               CREATE TABLE IF NOT EXISTS patients (
+                    id INTEGER PRIMARY KEY,
+                    name TEXT NOT NULL,
+                    illness TEXT NOT NULL,
+                    insurance CHAR NOT NULL CHECK(insurance IN ('Y', 'N'))
+               );
+          """
+          CURSOR.execute(sql)
+          CONN.commit()
 
      @classmethod
      def drop_table(cls):
-        """Drop the patients table if it exists."""
-        sql = "DROP TABLE IF EXISTS patients;"
-        CURSOR.execute(sql)
-        CONN.commit()
+          """Drop the patients table if it exists."""
+          sql = "DROP TABLE IF EXISTS patients;"
+          CURSOR.execute(sql)
+          CONN.commit()
 
      @classmethod
      def create(cls, name, illness, insurance):
@@ -57,11 +57,12 @@ class Patient:
      
      @classmethod
      def find_by_name(cls, name):
-        """Find a single patient by name."""
-        sql = "SELECT * FROM patients WHERE name = ?"
-        row = CURSOR.execute(sql, (name,)).fetchone()
+          """Find a single patient by name."""
+          name = name.strip()
+          sql = "SELECT name, illness, insurance, id FROM patients WHERE name = ?"
+          row = CURSOR.execute(sql, (name,)).fetchone()
 
-        return cls(*row) if row else None
+          return cls(*row) if row else None
 
      @classmethod
      def get_all(cls):
@@ -72,8 +73,8 @@ class Patient:
 
      @classmethod
      def instance_from_db(cls, row):
-        """Return a Patient object from a database row."""
-        return cls(row[1], row[2], row[3], id=row[0])
+          """Return a Patient object from a database row."""
+          return cls(row[1], row[2], row[3], id=row[0])
 
      def get_doctors(self):
           from models.doctor import Doctor
@@ -87,14 +88,14 @@ class Patient:
           return [Doctor(*row) for row in rows]
 
      def save(self):
-        """Insert or update a patient record in the database."""
-        if self.id is None:
-            sql = "INSERT INTO patients (name, illness, insurance) VALUES (?, ?, ?)"
-            CURSOR.execute(sql, (self.name, self.illness, self.insurance))
-            CONN.commit()
-            self.id = CURSOR.lastrowid
-        else:
-            self.update()
+          """Insert or update a patient record in the database."""
+          if self.id is None:
+               sql = "INSERT INTO patients (name, illness, insurance) VALUES (?, ?, ?)"
+               CURSOR.execute(sql, (self.name, self.illness, self.insurance))
+               CONN.commit()
+               self.id = CURSOR.lastrowid
+          else:
+               self.update()
 
      def update(self):
           """Update an existing patient in the database."""

@@ -30,7 +30,7 @@ def main() :
             search_specialty()
         elif choice == "7":
             display_doctors()
-        elif choice == "7":
+        elif choice == "8":
             schedule_appointment()
         elif choice == "0":
             exit_program()
@@ -49,7 +49,8 @@ def menu():
     print("4.) Press 4 to check for patient insurance coverage.")
     print("5.) Press 5 to lookup a doctor.")
     print("6.) Press 6 to find a specialist.")
-    print("7.) Press 7 to schedule an appointment.")
+    print("7.) Press 7 to list all doctors.")
+    print("8.) Press 8 to schedule an appointment.")
     print("0.) Press 0 to exit the program.")
 
 if __name__ == "__main__":
