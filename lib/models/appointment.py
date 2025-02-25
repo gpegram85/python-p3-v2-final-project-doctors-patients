@@ -26,7 +26,9 @@ class Appointment:
             CREATE TABLE IF NOT EXISTS appointments (
                 id INTEGER PRIMARY KEY,
                 patient_id INTEGER NOT NULL,
+                patient_name TEXT NOT NULL,
                 doctor_id INTEGER NOT NULL,
+                doctor_name TEXT NOT NULL,
                 date TEXT NOT NULL CHECK(length(date) = 10), 
                 FOREIGN KEY (patient_id) REFERENCES patients(id) ON DELETE CASCADE,
                 FOREIGN KEY (doctor_id) REFERENCES doctors(id) ON DELETE CASCADE
@@ -73,8 +75,8 @@ class Appointment:
     def save(self):
         """Insert or update an appointment record in the database."""
         if self.id is None:
-            sql = "INSERT INTO appointments (patient_id, doctor_id, date) VALUES (?, ?, ?)"
-            CURSOR.execute(sql, (self.patient.id, self.doctor.id, self.date))
+            sql = "INSERT INTO appointments (patient_id, patient_name, doctor_id, doctor_name, date) VALUES (?, ?, ?, ?, ?)"
+            CURSOR.execute(sql, (self.patient.id, self.patient.name, self.doctor.id, self.doctor.name, self.date))
             CONN.commit()
             self.id = CURSOR.lastrowid
         else:
@@ -84,7 +86,7 @@ class Appointment:
         """Update an existing appointment in the database."""
         sql = """
             UPDATE appointments
-            SET patient_id = ?, doctor_id = ?, date = ?
+            SET patient_id = ?, patient_name = ?, doctor_id = ?, doctor_name = ?, date = ?
             WHERE id = ?
         """
         CURSOR.execute(sql, (self.patient.id, self.doctor.id, self.date, self.id))

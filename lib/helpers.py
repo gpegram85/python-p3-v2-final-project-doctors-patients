@@ -70,7 +70,23 @@ def display_doctors():
         print("No Doctors found.")
 
 def schedule_appointment():
-    pass
+    patient_name = input("Input patient's name: ")
+    doctor_name = input("Input doctor's name: ")
+    appointment_date = input("Input the date of the appointment in the format YYYY-MM-DD: ")
+
+    patient_name = patient_name.strip()
+    doctor_name = doctor_name.strip()
+
+    patient_result = Patient.find_by_name(patient_name)
+    doctor_result = Doctor.find_by_name(doctor_name)
+
+    if patient_result and doctor_result:
+        Appointment.create(patient_result, doctor_result, appointment_date)
+        print(f"Appointment created. {patient_result.name} meeting with {doctor_result.name} on {appointment_date}.")
+    else:
+        print("Error creating appointment.")
+
+       
 
 def exit_program():
     print("Exiting! Goodbye.")
